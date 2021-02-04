@@ -29,68 +29,35 @@ String calibrate_endpoint;
 
 int delaytime = 1000;
 
-const char* dirtya_root_ca = \
-  "-----BEGIN CERTIFICATE-----\n" \
-  "MIIFTTCCBDWgAwIBAgISA0thyGN4KvIZjf3VrBgIjSOcMA0GCSqGSIb3DQEBCwUA\n" \
-  "MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD\n" \
-  "EwJSMzAeFw0yMDEyMjMwNTI5NTRaFw0yMTAzMjMwNTI5NTRaMC4xLDAqBgNVBAMT\n" \
-  "I3Jlc2lkZW50aWVkaXJ0eWEuc3R1ZGVudC51dHdlbnRlLm5sMIIBIjANBgkqhkiG\n" \
-  "9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtzmc2ihYCVsPrpGDOsnSQFQaLjl/RWlGKKPW\n" \
-  "VnIbdw1NrET7l8fL/GfT6jFRo3N/EreY8XTh8TTeQ9vWwdjeNFonJYvITG5+BgZ8\n" \
-  "+gw3pFFvGlFgYGkVfLYyccIilEeIRaX0mScD+e6ayxEeODk+yNNPZM9EUvDBEQcy\n" \
-  "EBBeHXyCew/SdZuzh56HCWEcKpkoNmg5B5d0LO86AcLLgrYKa9ILWV3Z0WTGhOss\n" \
-  "Jp4Rujd2Ar6mmrPXVYb7WrcIiYF/PKkkbdaDp1/WmyyqBweZjnPrz4yN76Ya2H2s\n" \
-  "KMEHNuWy+NR7B19C/R4t7nGGCwgHLZrez8+hblXF7njvgRcMRQIDAQABo4ICXzCC\n" \
-  "AlswDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcD\n" \
-  "AjAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBQ9sL3ZLwyuBJ4jpOHQfnwQv1AwbDAf\n" \
-  "BgNVHSMEGDAWgBQULrMXt1hWy65QCUDmH6+dixTCxjBVBggrBgEFBQcBAQRJMEcw\n" \
-  "IQYIKwYBBQUHMAGGFWh0dHA6Ly9yMy5vLmxlbmNyLm9yZzAiBggrBgEFBQcwAoYW\n" \
-  "aHR0cDovL3IzLmkubGVuY3Iub3JnLzAuBgNVHREEJzAlgiNyZXNpZGVudGllZGly\n" \
-  "dHlhLnN0dWRlbnQudXR3ZW50ZS5ubDBMBgNVHSAERTBDMAgGBmeBDAECATA3Bgsr\n" \
-  "BgEEAYLfEwEBATAoMCYGCCsGAQUFBwIBFhpodHRwOi8vY3BzLmxldHNlbmNyeXB0\n" \
-  "Lm9yZzCCAQUGCisGAQQB1nkCBAIEgfYEgfMA8QB2AESUZS6w7s6vxEAH2Kj+KMDa\n" \
-  "5oK+2MsxtT/TM5a1toGoAAABdo5KK9kAAAQDAEcwRQIgNcdw4A9ziwaMUwPH6rYs\n" \
-  "VW+7jO6Kn8xFONmlw8m8UdoCIQCfbVwF18pHqGkMqH9XxcTqfozmGGiCWnIncE6M\n" \
-  "iQcZ/AB3APZclC/RdzAiFFQYCDCUVo7jTRMZM7/fDC8gC8xO8WTjAAABdo5KK8wA\n" \
-  "AAQDAEgwRgIhAIBXU1DND2O50rO8AkZi9lJ21I7rgoVjEnDXpAUfruYtAiEAnEz1\n" \
-  "brZDyIVAnmfJKjNXUm7/WzQflQmmM1DMVCuurggwDQYJKoZIhvcNAQELBQADggEB\n" \
-  "AC6+R++mqwmw1OSDTGe+L4mh4pFsUR66winzz8Ij3+LLl8KToBzMy3lOxbjeyfrS\n" \
-  "LvQ0nXAfWZco++BJJH3VqaxskwVBetwfHCQO11EsLrx+1itg3ZpxdheYzidvrK5h\n" \
-  "t663YD6Jsy/86b4sbBP/foVgPjE99FZX9FGwHy9idJ6jL9ZMaLen5Xs02fmH3eth\n" \
-  "dE4zGZg6/CjuGN+FLgixSDUXhMUYu616Cfr7HnWRMCbvLa0LM9p+8G0EzGyB0U8d\n" \
-  "JENdiBnWg4EZUpznV6DxTnoFcGu4wUFoqr77/B6lXJBw7wsWLjYpfcXvxc0+n73v\n" \
-  "V4fp2+41FdZ9EaMUScl3ooE=\n" \
-  "-----END CERTIFICATE-----";
-
-
 void setup() {
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
-  EEPROM.begin(256);
+  EEPROM.begin(512);
   
   // Value      | Address
   // API port   | 0 (length 2)
-  // API host   | 2 (length 40)
-  // measure    | 42 (length 30)
-  // calibrate  | 72 (length 30)
-  // wifi ssid  | 102 (length 30)
-  // wifi pass  | 132 (length 30)
-  // delay      | 162 (length 2)
-  // tare offset| 164 (length 4)
+  // API host   | 2 (length 60)
+  // measure    | 62 (length 60)
+  // calibrate  | 122 (length 60)
+  // wifi ssid  | 182 (length 60)
+  // wifi pass  | 242 (length 60)
+  // delay      | 302 (length 2)
+  // tare offset| 304 (length 4)
+
 
   // WiFi creds
-  ssid = readstring(102, 131);
-  pass = readstring(132,161);
+  ssid = readstring(182, 241);
+  pass = readstring(242,301);
 
   // API endpoint
-  host = readstring(2,41);
+  host = readstring(2,61);
   port = readint(0);
 
-  measure_endpoint = readstring(42,71);
-  calibrate_endpoint = readstring(72,101);
+  measure_endpoint = readstring(62,121);
+  calibrate_endpoint = readstring(122,181);
 
-  delaytime = readint(162);
+  delaytime = readint(302);
 
-  scale.set_offset(readlong(164));
+  scale.set_offset(readlong(304));
   
   // Connecting to WiFi
   WiFi.begin(ssid, pass);
@@ -163,23 +130,19 @@ void handleRoot() {
 
 void delayfunction(int miliseconds) {
   delaytime = miliseconds;
-  writeint(162, miliseconds);
+  writeint(302, miliseconds);
 }
 
 void apifunction(String newhost, int newport) {
       String backup_host = host;
       int backup_port = port;
-      if (newhost != "" && newhost.length() <= 40) {
+      if (newhost != "" && newhost.length() <= 60) {
         host = newhost;
         port = newport;
         writestring(2,newhost);
         writeint(0,newport);
         client.stop();
-        if (port == 443) {
-          client.setCACert(dirtya_root_ca);
-        } else {
-          client.setInsecure();
-        }
+        client.setInsecure();
         if (client.connect(host, port) != 1) {
           server.send(500, "text/plain", "Failed to connect to new API, falling back to previous API...");
           host = backup_host;
@@ -187,11 +150,7 @@ void apifunction(String newhost, int newport) {
           writestring(2,backup_host);
           writeint(0,backup_port);
           client.stop();
-          if (port == 443) {
-            client.setCACert(dirtya_root_ca);
-          } else {
-            client.setInsecure();
-          }
+          client.setInsecure();
           client.connect(host, port);
         } else {
           server.send(200, "text/plain", "OK");
@@ -202,11 +161,11 @@ void apifunction(String newhost, int newport) {
 void wififunction(String newssid, String newpass) {
   String backup_ssid = ssid;
   String backup_pass = pass;
-  if (newssid != "" && newpass != "" && newssid.length() <= 30 && newpass.length() <= 30) {
+  if (newssid != "" && newpass != "" && newssid.length() <= 60 && newpass.length() <= 60) {
     ssid = newssid;
     pass = newpass;
-    writestring(102, newssid);
-    writestring(132,newpass);
+    writestring(182, newssid);
+    writestring(242,newpass);
     WiFi.disconnect();
     WiFi.begin(ssid, pass);
     int wificounter = 0;
@@ -217,8 +176,8 @@ void wififunction(String newssid, String newpass) {
     if (WiFi.status() != WL_CONNECTED) {
       ssid = backup_ssid;
       pass = backup_pass;
-      writestring(102, backup_ssid);
-      writestring(132,backup_pass);
+      writestring(182, backup_ssid);
+      writestring(242,backup_pass);
       WiFi.begin(ssid, pass);
       while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -242,11 +201,7 @@ void kgfunction(float weight, int measurements) {
     data += "}";
     
     if (!client.connected()) {
-      if (port == 443) {
-        client.setCACert(dirtya_root_ca);
-      } else {
-        client.setInsecure();
-      }
+      client.setInsecure();
       client.connect(host, port);
     }
     
@@ -278,15 +233,15 @@ void kgfunction(float weight, int measurements) {
 void tarefunction() {
   server.send(200, "text/plain", "OK");
   scale.tare(255);
-  writelong(164,scale.get_offset());
+  writelong(304,scale.get_offset());
 }
 
 void endpointfunction(String new_measure_endpoint, String new_calibrate_endpoint) {
-  if (new_measure_endpoint.length() <= 30 && new_calibrate_endpoint.length() <= 30) {
+  if (new_measure_endpoint.length() <= 60 && new_calibrate_endpoint.length() <= 60) {
     measure_endpoint = new_measure_endpoint;
     calibrate_endpoint = new_calibrate_endpoint;
-    writestring(42,new_measure_endpoint);
-    writestring(72,new_calibrate_endpoint);
+    writestring(62,new_measure_endpoint);
+    writestring(122,new_calibrate_endpoint);
   }
 }
 
@@ -357,13 +312,9 @@ void loop() {
   String data = "{\"reading\": ";
   data += String((int) scale.get_value(100));
   data += "}";
-  
+    
   if (!client.connected()) {
-    if (port == 443) {
-      client.setCACert(dirtya_root_ca);
-    } else {
-      client.setInsecure();
-    }
+    client.setInsecure();
     client.connect(host, port);
   }
 
