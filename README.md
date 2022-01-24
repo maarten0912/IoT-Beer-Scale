@@ -20,6 +20,7 @@
 
 ## Default settings
 These values can currently not be changed:
+
 Scale API:
 - IP is dynamically obtained
 - Port `6969`
